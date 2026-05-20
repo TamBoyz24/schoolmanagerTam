@@ -1,0 +1,931 @@
+```html
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management System</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    min-height:100vh;
+
+    background:
+            linear-gradient(135deg,#4f46e5,#7c3aed,#9333ea);
+
+    background-size:400% 400%;
+
+    animation:bgMove 12s ease infinite;
+
+    padding:40px 20px;
+
+    overflow-x:hidden;
+}
+
+@keyframes bgMove{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    50%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0% 50%;
+    }
+}
+
+.main-container{
+
+    max-width:1400px;
+
+    margin:auto;
+
+    background:rgba(255,255,255,0.95);
+
+    backdrop-filter:blur(14px);
+
+    border-radius:32px;
+
+    padding:35px;
+
+    box-shadow:
+            0 30px 60px rgba(0,0,0,0.15);
+
+    animation:fadeIn .7s ease;
+}
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.title{
+
+    text-align:center;
+
+    font-size:46px;
+
+    font-weight:700;
+
+    color:#222;
+
+    margin-bottom:10px;
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:#666;
+
+    margin-bottom:35px;
+
+    font-size:16px;
+}
+
+.grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:25px;
+
+    margin-bottom:30px;
+}
+
+.card-custom{
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:28px;
+
+    box-shadow:
+            0 15px 35px rgba(0,0,0,0.07);
+
+    transition:.3s ease;
+}
+
+.card-custom:hover{
+
+    transform:translateY(-6px);
+}
+
+.card-title{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#333;
+
+    margin-bottom:20px;
+}
+
+.form-group-custom{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+}
+
+.input-custom{
+
+    width:100%;
+
+    padding:15px 18px;
+
+    border-radius:16px;
+
+    border:1px solid #ddd;
+
+    outline:none;
+
+    font-size:15px;
+
+    transition:.3s;
+}
+
+.input-custom:focus{
+
+    border-color:#6d28d9;
+
+    box-shadow:
+            0 0 0 5px rgba(109,40,217,.15);
+
+    transform:translateY(-2px);
+}
+
+.btn-custom{
+
+    border:none;
+
+    border-radius:16px;
+
+    padding:14px 22px;
+
+    font-weight:600;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    text-decoration:none;
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:8px;
+}
+
+.btn-custom:hover{
+
+    transform:translateY(-3px) scale(1.02);
+
+    color:white;
+}
+
+.btn-primary-custom{
+
+    background:
+            linear-gradient(135deg,#6d28d9,#7c3aed);
+}
+
+.btn-search{
+
+    background:
+            linear-gradient(135deg,#059669,#10b981);
+}
+
+.btn-warning-custom{
+
+    background:
+            linear-gradient(135deg,#f59e0b,#f97316);
+}
+
+.btn-danger-custom{
+
+    background:
+            linear-gradient(135deg,#ef4444,#dc2626);
+}
+
+.table-wrapper{
+
+    overflow-x:auto;
+
+    border-radius:28px;
+
+    background:white;
+
+    box-shadow:
+            0 15px 35px rgba(0,0,0,0.08);
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+thead{
+
+    background:
+            linear-gradient(135deg,#6d28d9,#7c3aed);
+
+    color:white;
+}
+
+th{
+
+    padding:18px;
+
+    font-size:15px;
+
+    white-space:nowrap;
+}
+
+td{
+
+    padding:18px;
+
+    border-bottom:1px solid #eee;
+
+    white-space:nowrap;
+
+    transition:.3s;
+}
+
+tbody tr{
+
+    transition:.3s;
+}
+
+tbody tr:hover{
+
+    background:#f5f3ff;
+
+    transform:scale(1.01);
+}
+
+.action-buttons{
+
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+}
+
+.pagination-custom{
+
+    margin-top:30px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+.page-text{
+
+    font-weight:600;
+
+    color:#444;
+}
+
+.toast-custom{
+
+    position:fixed;
+
+    top:20px;
+
+    right:20px;
+
+    z-index:9999;
+
+    padding:16px 22px;
+
+    border-radius:18px;
+
+    color:white;
+
+    font-weight:600;
+
+    box-shadow:
+            0 15px 30px rgba(0,0,0,0.15);
+
+    animation:slideIn .5s ease;
+}
+
+.toast-success{
+
+    background:
+            linear-gradient(135deg,#10b981,#059669);
+}
+
+.toast-error{
+
+    background:
+            linear-gradient(135deg,#ef4444,#dc2626);
+}
+
+@keyframes slideIn{
+
+    from{
+        opacity:0;
+        transform:translateX(100%);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+.modal-overlay{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.5);
+
+    z-index:999;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+.modal-box{
+
+    width:450px;
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:30px;
+
+    animation:popup .3s ease;
+}
+
+@keyframes popup{
+
+    from{
+        transform:scale(.7);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+.modal-title{
+
+    font-size:26px;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+}
+
+.modal-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:10px;
+
+    margin-top:20px;
+}
+
+.validation-box{
+
+    margin-top:15px;
+
+    background:#fee2e2;
+
+    color:#dc2626;
+
+    padding:14px;
+
+    border-radius:14px;
+}
+
+.empty-state{
+
+    padding:40px;
+
+    text-align:center;
+
+    color:#666;
+}
+
+::-webkit-scrollbar{
+
+    width:10px;
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#7c3aed;
+
+    border-radius:20px;
+}
+
+@media(max-width:900px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .title{
+        font-size:34px;
+    }
+
+    .main-container{
+        padding:20px;
+    }
+
+    .action-buttons{
+        flex-direction:column;
+    }
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- SUCCESS -->
+
+<div th:if="${successMessage}"
+     class="toast-custom toast-success"
+     id="successToast">
+
+    <span th:text="${successMessage}"></span>
+
+</div>
+
+<!-- ERROR -->
+
+<div th:if="${errorMessage}"
+     class="toast-custom toast-error"
+     id="errorToast">
+
+    <span th:text="${errorMessage}"></span>
+
+</div>
+
+<div class="main-container">
+
+    <div class="title">
+        🎓 Student Management
+    </div>
+
+    <div class="subtitle">
+        Modern Student Management System
+    </div>
+
+    <div class="grid">
+
+        <!-- SEARCH -->
+
+        <div class="card-custom">
+
+            <div class="card-title">
+                🔍 Search Student
+            </div>
+
+            <form th:action="@{/}" method="get">
+
+                <div class="form-group-custom">
+
+                    <input type="text"
+                           name="keyword"
+                           th:value="${keyword}"
+                           placeholder="Search student..."
+                           class="input-custom">
+
+                    <button type="submit"
+                            class="btn-custom btn-search">
+
+                        Search
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- ADD -->
+
+        <div class="card-custom">
+
+            <div class="card-title">
+                ➕ Add Student
+            </div>
+
+            <form th:action="@{/add}"
+                  th:object="${student}"
+                  method="post">
+
+                <div class="form-group-custom">
+
+                    <input type="text"
+                           th:field="*{name}"
+                           placeholder="Student Name"
+                           class="input-custom">
+
+                    <input type="number"
+                           th:field="*{age}"
+                           placeholder="Student Age"
+                           class="input-custom">
+
+                    <input type="text"
+                           th:field="*{major}"
+                           placeholder="Student Major"
+                           class="input-custom">
+
+                    <input
+                            type="email"
+                            th:field="*{email}"
+                            placeholder="Student Email"
+                            class="input-custom">
+                    
+
+                    <input
+                            type="text"
+                            th:field="*{phone}"
+                            placeholder="Phone Number"
+                            class="input-custom">
+
+                    <input
+                            type="text"
+                            th:field="*{address}"
+                            placeholder="Address"
+                            class="input-custom">
+
+                    <button type="submit"
+                            class="btn-custom btn-primary-custom">
+
+                        Add Student
+
+                    </button>
+
+                </div>
+
+                <div th:if="${#fields.hasErrors('*')}"
+                     class="validation-box">
+
+                    <span th:each="err : ${#fields.errors('*')}"
+                          th:text="${err}"
+                          style="display:block;"></span>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- TABLE -->
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Major</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Action</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            <tr th:if="${students.totalElements == 0}">
+
+                <td colspan="5"
+                    class="empty-state">
+
+                    No students found.
+
+                </td>
+
+            </tr>
+
+            <tr th:each="s : ${students}">
+
+                <td th:text="${s.id}"></td>
+
+                <td th:text="${s.name}"></td>
+
+                <td th:text="${s.age}"></td>
+
+                <td th:text="${s.major}"></td>
+
+                <td th:text="${s.email}"></td>
+
+                <td th:text="${s.phone}"></td>
+
+                <td th:text="${s.address}"></td>
+
+                <td>
+
+                    <button type="button"
+                            class="btn-custom btn-warning-custom"
+
+                            th:attr="
+                            data-id=${s.id},
+                            data-name=${s.name},
+                            data-age=${s.age},
+                            data-major=${s.major},
+                            data-email=${s.email},
+                            data-phone=${s.phone},
+                            data-address=${s.address}"
+
+                            onclick="openEditModal(this)">
+
+                            ✏ Edit
+
+                        </button>
+
+                        <a th:href="@{/delete/{id}(id=${s.id})}"
+                           class="btn-custom btn-danger-custom"
+
+                           onclick="return confirmDelete()">
+
+                            🗑 Delete
+
+                        </a>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- PAGINATION -->
+
+    <div class="pagination-custom">
+
+        <a th:if="${students.hasPrevious()}"
+           th:href="@{/(page=${students.number - 1}, keyword=${keyword})}"
+           class="btn-custom btn-search">
+
+            ⬅ Previous
+
+        </a>
+
+        <span class="page-text">
+
+            Page
+
+            <span th:text="${students.number + 1}"></span>
+
+            /
+
+            <span th:text="${students.totalPages == 0 ? 1 : students.totalPages}"></span>
+
+        </span>
+
+        <a th:if="${students.hasNext()}"
+           th:href="@{/(page=${students.number + 1}, keyword=${keyword})}"
+           class="btn-custom btn-search">
+
+            Next ➡
+
+        </a>
+
+    </div>
+
+</div>
+
+<!-- MODAL -->
+
+<div id="editModal"
+     class="modal-overlay">
+
+    <div class="modal-box">
+
+        <div class="modal-title">
+
+            ✏ Edit Student
+
+        </div>
+
+        <form id="editForm"
+              method="post">
+
+            <div class="form-group-custom">
+
+                <input type="text"
+                       id="editName"
+                       name="name"
+                       class="input-custom"
+                       required>
+
+                <input
+                        type="email"
+                        id="editEmail"
+                        name="email"
+                        placeholder="Student Email"
+                        required
+                        class="input-custom">
+
+                <input
+                        type="text"
+                        id="editPhone"
+                        name="phone"
+                        placeholder="Phone Number"
+                        required
+                       class="input-custom">
+
+                <input
+                        type="text"
+                        id="editAddress"
+                        name="address"
+                        placeholder="Address"
+                        required
+                        class="input-custom"
+                />
+
+                <input type="number"
+                       id="editAge"
+                       name="age"
+                       class="input-custom"
+                       required>
+
+                <input type="text"
+                       id="editMajor"
+                       name="major"
+                       class="input-custom"
+                       required>
+
+            </div>
+
+            <div class="modal-actions">
+
+                <button type="button"
+                        class="btn-custom btn-danger-custom"
+                        onclick="closeEditModal()">
+
+                    Cancel
+
+                </button>
+
+                <button type="submit"
+                        class="btn-custom btn-primary-custom">
+
+                    Save
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+    function openEditModal(button){
+
+        const id = button.dataset.id;
+        const name = button.dataset.name;
+        const age = button.dataset.age;
+        const major = button.dataset.major;
+            const email = button.dataset.email;
+            const phone = button.dataset.phone;
+            const address = button.dataset.address;
+
+
+        document.getElementById('editName').value = name;
+        document.getElementById('editAge').value = age;
+        document.getElementById('editMajor').value = major;
+        document.getElementById('editEmail').value = email;
+        document.getElementById('editPhone').value = phone;
+        document.getElementById('editAddress').value = address;
+
+        document.getElementById('editForm').action = '/update/' + id;
+
+        document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function closeEditModal(){
+
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+    document.getElementById('editModal')
+        .addEventListener('click', function(e){
+
+        if(e.target === this){
+
+            closeEditModal();
+        }
+    });
+
+    function confirmDelete(){
+
+        return confirm("Are you sure you want to delete this student?");
+    }
+
+    // AUTO HIDE TOAST
+
+    setTimeout(() => {
+
+        const success = document.getElementById('successToast');
+
+        if(success){
+
+            success.style.opacity = '0';
+
+            setTimeout(() => success.remove(),500);
+        }
+
+        const error = document.getElementById('errorToast');
+
+        if(error){
+
+            error.style.opacity = '0';
+
+            setTimeout(() => error.remove(),500);
+        }
+
+    },3000);
+
+</script>
+
+</body>
+
+</html>
+```
