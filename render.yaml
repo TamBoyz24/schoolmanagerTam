@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: schoolmanagerTam
+    env: java
+    buildCommand: "./mvnw clean package"
+    startCommand: "java -jar target/*.jar"
+    plan: free
